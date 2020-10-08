@@ -418,4 +418,4 @@ MigrationBackup/
 # End of https://www.toptal.com/developers/gitignore/api/visualstudio,c++,windows
 
 # Assignment File
-#*.hwp
+*.hwp
