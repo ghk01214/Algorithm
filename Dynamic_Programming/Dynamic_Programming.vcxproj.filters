@@ -23,5 +23,11 @@
     <ClInclude Include="Matrix_Chain_Multiplication.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Levenshtein_Distance.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Floyd-Warshall_Algorithm.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
