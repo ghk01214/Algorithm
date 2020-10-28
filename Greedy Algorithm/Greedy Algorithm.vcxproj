@@ -139,8 +139,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Dijkstra Algorithm.h" />
     <ClInclude Include="Kruskal Algorithm.h" />
     <ClInclude Include="Prim Algorithm.h" />
+    <ClInclude Include="Task Scheduling.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
