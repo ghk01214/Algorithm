@@ -20,34 +20,36 @@ void PrintArray(int* iElement, int iSize)
 void CountingSort(int* iElement, int iSize)
 {
 	int iMax = iElement[0];
-	int iMin = iElement[0];
 
 	for (int i = 1; i < iSize; ++i)
 	{
-		if (iElement[i] < iMin)
-			iMin = iElement[i];
-
 		if (iElement[i] > iMax)
 			iMax = iElement[i];
 	}
 
-	int *iCount = new int[iMax];
-	int *iTemp = new int[iMax];
-	int *iSort = new int[iSize];
+	int* iCount = new int[iMax + 1] {};
+	int* iSort = new int[iSize] {};
 
 	for (int i = 0; i < iSize; ++i)
-		++iTemp[iElement[i]];
-
-	iCount[0] = iTemp[0];
+		++iCount[iElement[i]];
 
 	for (int i = 1; i <= iMax; ++i)
-		iCount[i] = iCount[i - 1] + iTemp[i];
+		iCount[i] += iCount[i - 1];
 
-	for (int i = iSize - 1; i >= 0; --i)
+	for (int i = 0; i < iSize; ++i)
 	{
 		iSort[iCount[iElement[i]] - 1] = iElement[i];
 		--iCount[iElement[i]];
 	}
+
+	for (int i = 0; i < iSize; ++i)
+		iElement[i] = iSort[i];
+
+	delete[] iCount;
+	delete[] iSort;
+
+	iCount = nullptr;
+	iSort = nullptr;
 }
 
 void operate()
