@@ -31,28 +31,21 @@ void CountingSort(int* iElement, int iSize)
 			iMax = iElement[i];
 	}
 
-	int* iCount = new int[iMax];
-
-	for (int i = 0; i < iMax; ++i)
-	{
-		iCount[i] = 0;
-	}
+	int *iCount = new int[iMax];
+	int *iTemp = new int[iMax];
+	int *iSort = new int[iSize];
 
 	for (int i = 0; i < iSize; ++i)
-	{
-		++iCount[iElement[i]];
-	}
+		++iTemp[iElement[i]];
 
-	for (int i = iMin + 1; i < iMax; ++i)
-	{
-		iCount[i] += iCount[i - 1];
-	}
+	iCount[0] = iTemp[0];
 
-	int* iTemp = new int[iSize];
+	for (int i = 1; i <= iMax; ++i)
+		iCount[i] = iCount[i - 1] + iTemp[i];
 
-	for (int i = iSize - 1; i > 0; --i)
+	for (int i = iSize - 1; i >= 0; --i)
 	{
-		iTemp[iCount[iElement[i]]] = iElement[i];
+		iSort[iCount[iElement[i]] - 1] = iElement[i];
 		--iCount[iElement[i]];
 	}
 }
