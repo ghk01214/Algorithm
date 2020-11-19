@@ -50,28 +50,28 @@ void HeapSort(int* iElement, int iSize)
 
 		int iNode = 0, iLeft = 1, iRight = 2;
 
-		do
-		{
-			if (iRight < i && iElement[iLeft] < iElement[iRight])
-			{
-				iLeft = iRight;
-			}
+		//do
+		//{
+		//	if (iRight < i && iElement[iLeft] < iElement[iRight])
+		//	{
+		//		iLeft = iRight;
+		//	}
 
-			if (iElement[iLeft] > iElement[iNode])
-			{
-				Swap(&iElement[iNode], &iElement[iLeft]);
+		//	if (iElement[iLeft] > iElement[iNode])
+		//	{
+		//		Swap(&iElement[iNode], &iElement[iLeft]);
 
-				iNode = iLeft;
-				iLeft = iNode * 2 + 1;
-				iRight = iNode * 2 + 2;
-			}
-			else
-			{
-				iLeft = i;
-			}
+		//		iNode = iLeft;
+		//		iLeft = iNode * 2 + 1;
+		//		iRight = iNode * 2 + 2;
+		//	}
+		//	else
+		//	{
+		//		iLeft = i;
+		//	}
 
-		} while (iLeft < i);
-		//Heapify(iElement, i);
+		//} while (iLeft < i);
+		Heapify(iElement, i);
 	}
 }
 
