@@ -23,5 +23,8 @@
     <ClInclude Include="Binary_Search.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Red-Black_Tree.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
