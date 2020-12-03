@@ -32,20 +32,6 @@ public:
 	void RotateLeft(Node* nCurrent);
 	void RotateRight(Node* nCurrent);
 public:
-	bool IsLeaf(Node* nCurrent);
-	void ReplaceNode(Node* nCurrent, Node* nChild);
-
-	void DeleteNode(Node* nCurrent);
-	void DeleteCase1(Node* nCurrent);
-	void DeleteCase2(Node* nCurrent);
-	void DeleteCase3(Node* nCurrent);
-	void DeleteCase4(Node* nCurrent);
-	void DeleteCase5(Node* nCurrent);
-	void DeleteCase6(Node* nCurrent);
-
-	void RemoveNode(int iData);
-	Node* RemoveSequence(Node* nNode, int iData);
-public:
 	bool SearchNode(int iData);
 
 	Node* ReturnRoot() { return nRoot; }
@@ -232,174 +218,6 @@ inline void Tree::RotateRight(Node* nCurrent)
 		nRoot = nChild;
 }
 
-inline bool Tree::IsLeaf(Node* nCurrent)
-{
-	if (nCurrent->nLeft == nullptr && nCurrent->nRight == nullptr)
-		return true;
-	else
-		return false;
-}
-inline void Tree::ReplaceNode(Node* nCurrent, Node* nChild)
-{
-	nChild->nParent = nCurrent->nParent;
-
-	if (nCurrent->nParent->nLeft == nCurrent)
-		nCurrent->nParent->nLeft = nChild;
-	else if (nCurrent->nParent->nRight == nCurrent)
-		nCurrent->nParent->nRight = nChild;
-}
-
-inline void Tree::DeleteNode(Node* nCurrent)
-{
-	Node* nChild;
-
-	if (IsLeaf(nCurrent->nRight))
-		nChild = nCurrent->nLeft;
-	else
-		nChild = nCurrent->nRight;
-
-	ReplaceNode(nCurrent, nChild);
-
-	if (nCurrent->sColor == "black")
-	{
-		if (nChild->sColor == "red")
-			nChild->sColor = "black";
-		else
-			DeleteCase1(nChild);
-	}
-}
-inline void Tree::DeleteCase1(Node* nCurrent)
-{
-	if (nCurrent->nParent != nullptr)
-		DeleteCase2(nCurrent);
-}
-inline void Tree::DeleteCase2(Node* nCurrent)
-{
-	Node* nSibling = Sibling(nCurrent);
-
-	if (nSibling->sColor == "red")
-	{
-		nCurrent->nParent->sColor = "red";
-		nSibling->sColor = "black";
-
-		if (nCurrent == nCurrent->nParent->nLeft)
-			RotateLeft(nCurrent->nParent);
-		else
-			RotateRight(nCurrent->nParent);
-	}
-
-	DeleteCase3(nCurrent);
-}
-inline void Tree::DeleteCase3(Node* nCurrent)
-{
-	Node* nSibling = Sibling(nCurrent);
-
-	if ((nCurrent->nParent->sColor == "black") && (nSibling->sColor == "black") && (nSibling->nLeft->sColor == "black") && (nSibling->nRight->sColor == "black"))
-	{
-		nSibling->sColor = "red";
-		DeleteCase1(nCurrent->nParent);
-	}
-	else
-		DeleteCase4(nCurrent);
-}
-inline void Tree::DeleteCase4(Node* nCurrent)
-{
-	Node* nSibling = Sibling(nCurrent);
-
-	if ((nCurrent->nParent->sColor == "red") && (nSibling->sColor == "black") && (nSibling->nLeft->sColor == "black") && (nSibling->nRight->sColor == "black"))
-	{
-		nSibling->sColor = "red";
-		nCurrent->nParent->sColor = "black";
-	}
-	else
-		DeleteCase5(nCurrent);
-}
-inline void Tree::DeleteCase5(Node* nCurrent)
-{
-	Node* nSibling = Sibling(nCurrent);
-
-	if (nSibling->sColor == "black")
-	{
-		if ((nCurrent == nCurrent->nParent->nLeft) && (nSibling->nLeft->sColor == "red") && (nSibling->nRight->sColor == "black"))
-		{
-			nSibling->sColor = "red";
-			nSibling->nLeft->sColor = "black";
-			RotateRight(nSibling);
-		}
-		else if ((nCurrent == nCurrent->nParent->nRight) && (nSibling->nLeft->sColor == "black") && (nSibling->nRight->sColor == "red"))
-		{
-			nSibling->sColor = "red";
-			nCurrent->nRight->sColor = "black";
-			RotateLeft(nSibling);
-		}
-	}
-
-	DeleteCase6(nCurrent);
-}
-inline void Tree::DeleteCase6(Node* nCurrent)
-{
-	Node* nSibling = Sibling(nCurrent);
-
-	nSibling->sColor = nCurrent->nParent->sColor;
-	nCurrent->nParent->sColor = "black";
-
-	if (nCurrent == nCurrent->nParent->nLeft)
-	{
-		nSibling->nRight->sColor = "black";
-		RotateLeft(nCurrent->nParent);
-	}
-	else
-	{
-		nSibling->nLeft->sColor = "black";
-		RotateRight(nCurrent->nParent);
-	}
-}
-
-inline void Tree::RemoveNode(int iData)
-{
-	Node * nNode = nRoot;
-	RemoveSequence(nNode, iData);
-}
-inline Node* Tree::RemoveSequence(Node* nNode, int iData)
-{
-	if (nNode == nullptr)
-		return nNode;
-	else if (nNode->iData > iData)
-		nNode->nLeft = RemoveSequence(nNode->nLeft, iData);
-	else if (nNode->iData < iData)
-		nNode->nRight = RemoveSequence(nNode->nRight, iData);
-	else
-	{
-		Node* tempNode = nNode;
-
-		DeleteNode(nNode);
-
-		if (nNode->nLeft == nullptr && nNode->nRight == nullptr)
-		{
-			delete nNode;
-			nNode = nullptr;
-		}
-		else if (nNode->nLeft == nullptr)
-		{
-			nNode = nNode->nRight;
-			delete tempNode;
-		}
-		else if (nNode->nRight == nullptr)
-		{
-			nNode = nNode->nLeft;
-			delete tempNode;
-		}
-		else
-		{
-			tempNode = MaxNode(nNode->nLeft);
-			nNode->iData = tempNode->iData;
-			nNode->nLeft = RemoveSequence(nNode->nLeft, tempNode->iData);
-		}
-	}
-
-	return nNode;
-}
-
 inline bool Tree::SearchNode(int iData)
 {
 	Node* nNode = nRoot;
@@ -428,7 +246,11 @@ inline void Tree::PreOrder(Node* nCurrent)
 {
 	if (nCurrent != nullptr)
 	{
-		std::cout << " " << nCurrent->iData;
+		std::cout << " " << nCurrent->iData << "(" << nCurrent->sColor << ")";
+
+		if (nCurrent == nRoot)
+			std::cout << "(Root)";
+
 		PreOrder(nCurrent->nLeft);
 		PreOrder(nCurrent->nRight);
 	}
@@ -439,6 +261,10 @@ inline void Tree::InOrder(Node* nCurrent)
 	{
 		InOrder(nCurrent->nLeft);
 		std::cout << " " << nCurrent->iData << "(" << nCurrent->sColor << ")";
+
+		if (nCurrent == nRoot)
+			std::cout << "(Root)";
+
 		InOrder(nCurrent->nRight);
 	}
 }
@@ -448,7 +274,10 @@ inline void Tree::PostOrder(Node* nCurrent)
 	{
 		PostOrder(nCurrent->nLeft);
 		PostOrder(nCurrent->nRight);
-		std::cout << " " << nCurrent->iData;
+		std::cout << " " << nCurrent->iData << "(" << nCurrent->sColor << ")";
+
+		if (nCurrent == nRoot)
+			std::cout << "(Root)";
 	}
 }
 inline Node* Tree::MaxNode(Node* nNode)
@@ -468,24 +297,19 @@ inline Tree::~Tree()
 
 void operate()
 {
-	Tree* tBinaryTree = new Tree;
+	Tree* tRedBlackTree = new Tree;
 
 	int array[10] = { 13, 8, 1, 6, 11, 17, 15, 25, 22, 27 };
 
 	for (int i = 0; i < 10; ++i)
-		tBinaryTree->AddNode(array[i]);
-
-	//std::cout << "전위 순회 :";
-	//tBinaryTree->PreOrder(tBinaryTree->ReturnRoot());
+		tRedBlackTree->AddNode(array[i]);
 
 	std::cout << "\n중위 순회 :";
-	tBinaryTree->InOrder(tBinaryTree->ReturnRoot());
+	tRedBlackTree->InOrder(tRedBlackTree->ReturnRoot());
 
-	//std::cout << "\n후위 순회 :";
-	//tBinaryTree->PostOrder(tBinaryTree->ReturnRoot());
 	std::cout << std::endl;
-	std::cout << "\n메뉴 :\n" << "1. 노드 추가\n" << "2. 노드 탐색\n" << "3. 노드 삭제\n"
-		<< "4. 전위 순회 출력\n" << "5. 중위 순회 출력\n" << "6. 후위 순회 출력\n" << "0. 종료" << std::endl;
+	std::cout << "\n메뉴 :\n" << "1. 노드 추가\n" << "2. 노드 탐색\n"
+		<< "3. 전위 순회 출력\n" << "4. 중위 순회 출력\n" << "5. 후위 순회 출력\n" << "0. 종료" << std::endl;
 
 	bool bBreak = false;
 	while (!bBreak)
@@ -501,7 +325,7 @@ void operate()
 			std::cout << "추가할 값 입력 : ";
 			std::cin >> iData;
 
-			tBinaryTree->AddNode(iData);
+			tRedBlackTree->AddNode(iData);
 
 			break;
 		}
@@ -510,39 +334,30 @@ void operate()
 			std::cout << "탐색할 값 입력 : ";
 			std::cin >> iData;
 
-			tBinaryTree->SearchNode(iData);
+			tRedBlackTree->SearchNode(iData);
 
 			break;
 		}
 		case 3:
 		{
-			std::cout << "삭제할 값 입력 : ";
-			std::cin >> iData;
-
-			tBinaryTree->RemoveNode(iData);
+			std::cout << "전위 순회 :";
+			tRedBlackTree->PreOrder(tRedBlackTree->ReturnRoot());
+			std::cout << std::endl;
 
 			break;
 		}
 		case 4:
 		{
-			std::cout << "전위 순회 :";
-			tBinaryTree->PreOrder(tBinaryTree->ReturnRoot());
+			std::cout << "\n중위 순회 :";
+			tRedBlackTree->InOrder(tRedBlackTree->ReturnRoot());
 			std::cout << std::endl;
 
 			break;
 		}
 		case 5:
 		{
-			std::cout << "\n중위 순회 :";
-			tBinaryTree->InOrder(tBinaryTree->ReturnRoot());
-			std::cout << std::endl;
-
-			break;
-		}
-		case 6:
-		{
 			std::cout << "\n후위 순회 :";
-			tBinaryTree->PostOrder(tBinaryTree->ReturnRoot());
+			tRedBlackTree->PostOrder(tRedBlackTree->ReturnRoot());
 			std::cout << std::endl;
 
 			break;
